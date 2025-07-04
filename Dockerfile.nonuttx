@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop
+FROM ghcr.io/sloretz/ros:humble-desktop
 
 SHELL ["/bin/bash", "-c"]
 
@@ -10,14 +10,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-reco
     git \
     wget \
     curl \
-    python3-pip \
-    python3-jinja2 \
-    python3-empy \
-    python3-toml \
-    python3-numpy \
-    python3-yaml \
-    python3-dev \
-    python3-setuptools \
     libxml2-utils \
     libxslt1-dev \
     socat \
@@ -37,7 +29,7 @@ RUN git clone -b v2.4.2 https://github.com/eProsima/Micro-XRCE-DDS-Agent.git src
 # Clonar PX4 y ejecutar script de dependencias desde su propia ruta
 WORKDIR /root
 RUN git clone --recursive https://github.com/PX4/PX4-Autopilot.git
-RUN bash PX4-Autopilot/Tools/setup/ubuntu.sh
+RUN ./PX4-Autopilot/Tools/setup/ubuntu.sh --no-nuttx 
 
 # Compilar el workspace ROS 2
 WORKDIR /root/ros2_ws
@@ -50,4 +42,5 @@ RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
 # Directorio por defecto y terminal interactiva
 WORKDIR /root
 CMD ["bash"]
+
 
